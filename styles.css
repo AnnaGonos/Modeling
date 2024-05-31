@@ -1,0 +1,229 @@
+body {
+    display: block;
+    overflow-x: hidden;
+}
+.toggle-btn {
+    color: #595959;
+    background-color: #dec8ff;
+    width: 150px;
+    height: 50px;
+    max-width: 50%;
+    border-radius: 50px !important;
+}
+
+.expandable-text {
+    display: none;
+
+}
+
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 600px; /* или любую другую высоту, которую вы хотите */
+    overflow: hidden;
+}
+
+.carousel-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item.active {
+    opacity: 1;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.expanded {
+    display: block;
+
+}
+
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+nav {
+    background-color: #dec8ff;
+}
+.navbar-brand img {
+    max-height: 50px;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    text-transform: uppercase;
+    font-weight: 900;
+    color: #683aa4;
+}
+nav ul li a {
+    color: #494949;
+    font-size: 22px;
+    margin: auto 30px;
+}
+nav ul li a:hover {
+    color: #683aa4;
+}
+
+section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+section h1 {
+    text-transform: uppercase;
+    font-weight: 900;
+    color: #683aa4;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+section g1 {
+    font-weight: 900;
+    color: #494949;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+section p {
+    font-size: 16px;
+    font-weight: 300;
+}
+button {
+    max-width: 50%;
+    border-radius: 50px !important;
+}
+
+
+#hero .col {
+    justify-content: center;
+    flex-direction: column;
+    display: flex;
+}
+#hero .img-col {
+    justify-content: flex-end;
+    margin-top: 100px;
+}
+#hero img {
+    max-width: 130% !important;
+    width: 130%;
+}
+#hero .card {
+    box-shadow: 11px 7px 16px #f9f9f9;
+    border: 0;
+    text-align: center;
+}
+#hero .icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 20px;
+}
+
+#projects .projects {
+    margin-bottom: 50px;
+}
+
+#contact {
+    text-align: center;
+    background-color: #683aa4;
+    color: white;
+}
+
+
+
+#contact h1 {
+    text-align: center;
+    color: white;
+}
+
+input[type="number"] {
+    width: 250px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 50px !important;
+    border: 2px solid #683aa4;
+    font-size: 12px;
+    color: #2a2a2a;
+    background-color: #f8f9fa;
+}
+
+input[type="submit"] {
+    width: 150px;
+    height: 50px;
+    max-width: 50%;
+    border-radius: 50px !important;
+    color: #595959;
+    background-color: #dec8ff;
+
+}
+
+.container2 {
+    column-count: 3;
+}
+
+select {
+    width: 250px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 50px !important;
+    border: 2px solid #683aa4;
+    font-size: 12px;
+    color: #2a2a2a;
+    background-color: #f8f9fa;
+}
+
+.canvas-container10 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.portfolio_section {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.portfolio_taital {
+    width: 100%;
+    float: left;
+    font-size: 40px;
+    color: #272727;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.portfolio_section_2 {
+    padding: 50px 0px;
+    width: 100%;
+}
+
+.text {
+    color: white;
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 80%;
+}

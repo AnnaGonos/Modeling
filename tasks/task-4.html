@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Визуализация движения маятников с Plotly</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+
+<div id="phi1" style="width:800px;height:400px;"></div>
+<div id="phi2" style="width:800px;height:400px;"></div>
+<div id="v1" style="width:800px;height:400px;"></div>
+<div id="v2" style="width:800px;height:400px;"></div>
+
+<script>
+    // Параметры системы
+    const k = 10; // Н/м
+    const L_1 = 0.5; //  расстояние  L1  от точки крепления маятников (м)
+    const L = 1; //
+    const m = 1; //
+    const beta = 0.1; // коэффициент затухания
+    const phi_01 = 0.3; // Начальный угол отклонения φ1 (рад)
+    const phi_02 = 0.3; // Начальный угол отклонения φ2 (рад)
+    const g = 9.81; //
+    const omega_1 = Math.sqrt(g / L);
+    const omega_2 = Math.sqrt(g / L + 2 * k * Math.pow(L_1, 2) / (m * Math.pow(L, 2)));
+
+    // Функции для расчета углов и скоростей
+    function phi_1(t) {
+        return phi_01 * Math.cos(omega_1 * t) + phi_02 * Math.cos(omega_2 * t);
+    }
+
+    function phi_2(t) {
+        return phi_01 * Math.cos(omega_1 * t) - phi_02 * Math.cos(omega_2 * t);
+    }
+
+    function v_1(t) {
+        return -phi_01 * omega_1 * Math.sin(omega_1 * t) - phi_02 * omega_2 * Math.sin(omega_2 * t);
+    }
+
+    function v_2(t) {
+        return -phi_01 * omega_1 * Math.sin(omega_1 * t) + phi_02 * omega_2 * Math.sin(omega_2 * t);
+    }
+
+    // Генерация данных для графиков
+    const t_max = 20;
+    const dt = 0.01;
+    let times = [];
+    let phi1_values = [];
+    let phi2_values = [];
+    let v1_values = [];
+    let v2_values = [];
+
+    for (let t = 0; t <= t_max; t += dt) {
+        times.push(t);
+        phi1_values.push(phi_1(t));
+        phi2_values.push(phi_2(t));
+        v1_values.push(v_1(t));
+        v2_values.push(v_2(t));
+    }
+
+    // Функция для создания графика
+    function createPlotlyGraph(elementId, yData, title) {
+        const trace = {
+            type: 'scatter',
+            mode: 'lines',
+            x: times,
+            y: yData,
+            line: { shape: 'spline' }
+        };
+
+        const layout = {
+            title: title,
+            xaxis: {
+                title: 'Время (с)'
+            },
+            yaxis: {
+                title: title.includes('Угол') ? 'Угол (рад)' : 'Скорость (рад/с)'
+            }
+        };
+
+        Plotly.newPlot(elementId, [trace], layout);
+    }
+
+    // Создание графиков
+    createPlotlyGraph('phi1', phi1_values, 'Угол φ1(t)');
+    createPlotlyGraph('phi2', phi2_values, 'Угол φ2(t)');
+    createPlotlyGraph('v1', v1_values, 'Скорость v1(t)');
+    createPlotlyGraph('v2', v2_values, 'Скорость v2(t)');
+
+</script>
+</body>
+</html>
