@@ -1,11 +1,37 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Визуализация движения маятников с Plotly</title>
+    <title>Двойной маятник</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
+<h2>Ввод параметров системы</h2>
+<form id="paramForm">
+    <label for="k">k:</label>
+    <input type="number" id="k" value="10"><br>
+
+    <label for="L_1">L_1:</label>
+    <input type="number" id="L_1" value="0.5"><br>
+
+    <label for="L">L:</label>
+    <input type="number" id="L" value="1"><br>
+
+    <label for="m">m:</label>
+    <input type="number" id="m" value="1"><br>
+
+    <label for="beta">β:</label>
+    <input type="number" id="beta" value="0.1"><br>
+
+    <label for="phi_01">φ_01:</label>
+    <input type="number" id="phi_01" value="0.3"><br>
+
+    <label for="phi_02">φ_02:</label>
+    <input type="number" id="phi_02" value="0.3"><br>
+
+    <button type="button" onclick="updateParams()">Обновить параметры</button>
+</form>
+
+<br><br><h3>Визуализация</h3><br>
 
 <div id="phi1" style="width:800px;height:400px;"></div>
 <div id="phi2" style="width:800px;height:400px;"></div>
@@ -13,19 +39,25 @@
 <div id="v2" style="width:800px;height:400px;"></div>
 
 <script>
-    // Параметры системы
-    const k = 10; // Н/м
-    const L_1 = 0.5; //  расстояние  L1  от точки крепления маятников (м)
-    const L = 1; //
-    const m = 1; //
-    const beta = 0.1; // коэффициент затухания
-    const phi_01 = 0.3; // Начальный угол отклонения φ1 (рад)
-    const phi_02 = 0.3; // Начальный угол отклонения φ2 (рад)
-    const g = 9.81; //
-    const omega_1 = Math.sqrt(g / L);
-    const omega_2 = Math.sqrt(g / L + 2 * k * Math.pow(L_1, 2) / (m * Math.pow(L, 2)));
+    let k, L_1, L, m, beta, phi_01, phi_02, g, omega_1, omega_2;
+    let times, phi1_values, phi2_values, v1_values, v2_values;
 
-    // Функции для расчета углов и скоростей
+    function updateParams() {
+        k = parseFloat(document.getElementById('k').value);
+        L_1 = parseFloat(document.getElementById('L_1').value);
+        L = parseFloat(document.getElementById('L').value);
+        m = parseFloat(document.getElementById('m').value);
+        beta = parseFloat(document.getElementById('beta').value);
+        phi_01 = parseFloat(document.getElementById('phi_01').value);
+        phi_02 = parseFloat(document.getElementById('phi_02').value);
+        g = 9.81;
+        omega_1 = Math.sqrt(g / L);
+        omega_2 = Math.sqrt(g / L + 2 * k * Math.pow(L_1, 2) / (m * Math.pow(L, 2)));
+
+        generateData();
+        createPlotlyGraphs();
+    }
+
     function phi_1(t) {
         return phi_01 * Math.cos(omega_1 * t) + phi_02 * Math.cos(omega_2 * t);
     }
@@ -42,24 +74,32 @@
         return -phi_01 * omega_1 * Math.sin(omega_1 * t) + phi_02 * omega_2 * Math.sin(omega_2 * t);
     }
 
-    // Генерация данных для графиков
-    const t_max = 20;
-    const dt = 0.01;
-    let times = [];
-    let phi1_values = [];
-    let phi2_values = [];
-    let v1_values = [];
-    let v2_values = [];
+    function generateData() {
+        const t_max = 20;
+        const dt = 0.01;
 
-    for (let t = 0; t <= t_max; t += dt) {
-        times.push(t);
-        phi1_values.push(phi_1(t));
-        phi2_values.push(phi_2(t));
-        v1_values.push(v_1(t));
-        v2_values.push(v_2(t));
+        times = [];
+        phi1_values = [];
+        phi2_values = [];
+        v1_values = [];
+        v2_values = [];
+
+        for (let t = 0; t <= t_max; t += dt) {
+            times.push(t);
+            phi1_values.push(phi_1(t));
+            phi2_values.push(phi_2(t));
+            v1_values.push(v_1(t));
+            v2_values.push(v_2(t));
+        }
     }
 
-    // Функция для создания графика
+    function createPlotlyGraphs() {
+        createPlotlyGraph('phi1', phi1_values, 'Угол φ1(t)');
+        createPlotlyGraph('phi2', phi2_values, 'Угол φ2(t)');
+        createPlotlyGraph('v1', v1_values, 'Скорость v1(t)');
+        createPlotlyGraph('v2', v2_values, 'Скорость v2(t)');
+    }
+
     function createPlotlyGraph(elementId, yData, title) {
         const trace = {
             type: 'scatter',
@@ -81,13 +121,8 @@
 
         Plotly.newPlot(elementId, [trace], layout);
     }
-
-    // Создание графиков
-    createPlotlyGraph('phi1', phi1_values, 'Угол φ1(t)');
-    createPlotlyGraph('phi2', phi2_values, 'Угол φ2(t)');
-    createPlotlyGraph('v1', v1_values, 'Скорость v1(t)');
-    createPlotlyGraph('v2', v2_values, 'Скорость v2(t)');
-
+    // Вызов updateParams() для первоначальной визуализации
+    updateParams();
 </script>
 </body>
 </html>

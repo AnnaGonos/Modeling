@@ -264,15 +264,36 @@ createPlotlyGraph('phi2', phi2_values, 'Угол φ2(t)');
 createPlotlyGraph('v1', v1_values, 'Скорость v1(t)');
 createPlotlyGraph('v2', v2_values, 'Скорость v2(t)');
         </pre>
-        <br><br><h5>Исходные значения</h5><br>
 
-
-
-        <pre>
-        </pre>
 
         <br><br><h3>Визуализация</h3><br>
+        <h5>Ввод параметров системы</h5>
+        <form id="paramForm">
+            <label for="k">k (H/m):</label>
+            <input type="number" id="k" value="10"><br><br>
 
+            <label for="L_1">\(L_1\) (м):</label>
+            <input type="number" id="L_1" value="0.5"><br><br>
+
+            <label for="L">L (м):</label>
+            <input type="number" id="L" value="1"><br><br>
+
+            <label for="m">m (кг):</label>
+            <input type="number" id="m" value="1"><br><br>
+
+            <label for="beta">β:</label>
+            <input type="number" id="beta" value="0.1"><br><br>
+
+            <label for="phi_01">\(φ_{01}\) (рад):</label>
+            <input type="number" id="phi_01" value="0.3"><br><br>
+
+            <label for="phi_02">\(φ_{02}\) (рад):</label>
+            <input type="number" id="phi_02" value="0.3"><br><br>
+
+            <button type="button" class="custom-button" onclick="updateParams()">Обновить параметры</button>
+        </form>
+
+        <br><br><h5>Графики</h5><br>
 
         <div id="phi1" style="width:800px;height:400px;"></div>
         <div id="phi2" style="width:800px;height:400px;"></div>
@@ -280,19 +301,25 @@ createPlotlyGraph('v2', v2_values, 'Скорость v2(t)');
         <div id="v2" style="width:800px;height:400px;"></div>
 
         <script>
-            // Параметры системы
-            const k = 10;
-            const L_1 = 0.5;
-            const L = 1;
-            const m = 1;
-            const beta = 0.1;
-            const phi_01 = 0.3;
-            const phi_02 = 0.3;
-            const g = 9.81;
-            const omega_1 = Math.sqrt(g / L);
-            const omega_2 = Math.sqrt(g / L + 2 * k * Math.pow(L_1, 2) / (m * Math.pow(L, 2)));
+            let k, L_1, L, m, beta, phi_01, phi_02, g, omega_1, omega_2;
+            let times, phi1_values, phi2_values, v1_values, v2_values;
 
-            // Функции для расчета углов и скоростей
+            function updateParams() {
+                k = parseFloat(document.getElementById('k').value);
+                L_1 = parseFloat(document.getElementById('L_1').value);
+                L = parseFloat(document.getElementById('L').value);
+                m = parseFloat(document.getElementById('m').value);
+                beta = parseFloat(document.getElementById('beta').value);
+                phi_01 = parseFloat(document.getElementById('phi_01').value);
+                phi_02 = parseFloat(document.getElementById('phi_02').value);
+                g = 9.81;
+                omega_1 = Math.sqrt(g / L);
+                omega_2 = Math.sqrt(g / L + 2 * k * Math.pow(L_1, 2) / (m * Math.pow(L, 2)));
+
+                generateData();
+                createPlotlyGraphs();
+            }
+
             function phi_1(t) {
                 return phi_01 * Math.cos(omega_1 * t) + phi_02 * Math.cos(omega_2 * t);
             }
@@ -309,24 +336,32 @@ createPlotlyGraph('v2', v2_values, 'Скорость v2(t)');
                 return -phi_01 * omega_1 * Math.sin(omega_1 * t) + phi_02 * omega_2 * Math.sin(omega_2 * t);
             }
 
-            // Генерация данных для графиков
-            const t_max = 20;
-            const dt = 0.01;
-            let times = [];
-            let phi1_values = [];
-            let phi2_values = [];
-            let v1_values = [];
-            let v2_values = [];
+            function generateData() {
+                const t_max = 20;
+                const dt = 0.01;
 
-            for (let t = 0; t <= t_max; t += dt) {
-                times.push(t);
-                phi1_values.push(phi_1(t));
-                phi2_values.push(phi_2(t));
-                v1_values.push(v_1(t));
-                v2_values.push(v_2(t));
+                times = [];
+                phi1_values = [];
+                phi2_values = [];
+                v1_values = [];
+                v2_values = [];
+
+                for (let t = 0; t <= t_max; t += dt) {
+                    times.push(t);
+                    phi1_values.push(phi_1(t));
+                    phi2_values.push(phi_2(t));
+                    v1_values.push(v_1(t));
+                    v2_values.push(v_2(t));
+                }
             }
 
-            // Функция для создания графика
+            function createPlotlyGraphs() {
+                createPlotlyGraph('phi1', phi1_values, 'Угол φ1(t)');
+                createPlotlyGraph('phi2', phi2_values, 'Угол φ2(t)');
+                createPlotlyGraph('v1', v1_values, 'Скорость v1(t)');
+                createPlotlyGraph('v2', v2_values, 'Скорость v2(t)');
+            }
+
             function createPlotlyGraph(elementId, yData, title) {
                 const trace = {
                     type: 'scatter',
@@ -348,13 +383,8 @@ createPlotlyGraph('v2', v2_values, 'Скорость v2(t)');
 
                 Plotly.newPlot(elementId, [trace], layout);
             }
-
-            // Создание графиков
-            createPlotlyGraph('phi1', phi1_values, 'Угол φ1(t)');
-            createPlotlyGraph('phi2', phi2_values, 'Угол φ2(t)');
-            createPlotlyGraph('v1', v1_values, 'Скорость v1(t)');
-            createPlotlyGraph('v2', v2_values, 'Скорость v2(t)');
-
+            // Вызов updateParams() для первоначальной визуализации
+            updateParams();
         </script>
 
         <br><br><h3>Выводы и анализ результатов работы</h3><br>
